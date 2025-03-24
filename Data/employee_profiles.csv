@@ -1,0 +1,6 @@
+Employee ID,Name,Role,Travel History,Preferred Airlines,Preferred Hotels,Meal Preference,Seat Preference,Visa Requirement
+1001,Alice Doe,Senior Engineer,"USA, Germany, France (3x)","Lufthansa, Delta","Marriott, Hilton",Vegetarian,Window,"Schengen, USA"
+1002,Bob Smith,Project Manager,"India, UK (2x)",British Airways,"IHG, Hyatt",Vegan,Aisle,"UK, India"
+1003,Carol Lee,Data Scientist,"Singapore, Japan (1x)",Singapore Airlines,Marriott,Non-Veg,Aisle,"Japan, Singapore"
+1004,David Wong,Cybersecurity Lead,"Canada, USA, Germany (4x)","Air Canada, Delta",Hilton,Kosher,Window,"Schengen, USA, Canada"
+1005,Eva Patel,Software Engineer,Remote (0 trips),Emirates,Hyatt,Halal,Window,Schengen
