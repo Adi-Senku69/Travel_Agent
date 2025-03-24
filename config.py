@@ -7,4 +7,5 @@ config = {
         'aviation_api_key': 'YOUR_AVIATION_API_KEY'
     },
     'openai_api_key': 'YOUR_OPENAI_API_KEY'
+    
 }
