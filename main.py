@@ -6,7 +6,7 @@ from config import config
 
 app = FastAPI(title="AI Travel Assistant API")
 
-# Initialize the travel assistant
+# initialize the travel assistant
 assistant = AITravelAssistant(config)
 
 class QueryRequest(BaseModel):
@@ -40,4 +40,4 @@ async def register_trip(request: TripRegistrationRequest):
 
 if __name__== "_main_":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0",port=8000)
+    uvicorn.run(app, host="0.0.0.0",port=8080)
