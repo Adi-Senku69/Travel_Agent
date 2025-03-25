@@ -1,6 +1,6 @@
-**Employee Profiles:**
-
-1. **Alice Doe**
+Employee Profiles:
+1. Employee ID: 1001
+   - Name: Alice Doe
    - Role: Senior Engineer
    - Travel History: USA, Germany, France (3x)
    - Preferred Airlines: Lufthansa, Delta
@@ -9,7 +9,8 @@
    - Seat Preference: Window
    - Visa Requirement: Schengen, USA
 
-2. **Bob Smith**
+2. Employee ID: 1002
+   - Name: Bob Smith
    - Role: Project Manager
    - Travel History: India, UK (2x)
    - Preferred Airlines: British Airways
@@ -18,7 +19,8 @@
    - Seat Preference: Aisle
    - Visa Requirement: UK, India
 
-3. **Carol Lee**
+3. Employee ID: 1003
+   - Name: Carol Lee
    - Role: Data Scientist
    - Travel History: Singapore, Japan (1x)
    - Preferred Airlines: Singapore Airlines
@@ -27,7 +29,8 @@
    - Seat Preference: Aisle
    - Visa Requirement: Japan, Singapore
 
-4. **David Wong**
+4. Employee ID: 1004
+   - Name: David Wong
    - Role: Cybersecurity Lead
    - Travel History: Canada, USA, Germany (4x)
    - Preferred Airlines: Air Canada, Delta
@@ -36,7 +39,8 @@
    - Seat Preference: Window
    - Visa Requirement: Schengen, USA, Canada
 
-5. **Eva Patel**
+5. Employee ID: 1005
+   - Name: Eva Patel
    - Role: Software Engineer
    - Travel History: Remote (0 trips)
    - Preferred Airlines: Emirates
@@ -45,50 +49,7 @@
    - Seat Preference: Window
    - Visa Requirement: Schengen
 
-**Travel Requests:**
-
-1. **TR001**
-   - Employee: Alice Doe
-   - Destination: Berlin
-   - Purpose: Conference
-   - Dates: 2024-07-15 to 2024-07-20
-   - Budget Limit: $2500
-   - Approval Status: Approved
-
-2. **TR002**
-   - Employee: Bob Smith
-   - Destination: London
-   - Purpose: Client Meeting
-   - Dates: 2024-08-01 to 2024-08-05
-   - Budget Limit: $3000
-   - Approval Status: Pending
-
-3. **TR003**
-   - Employee: Carol Lee
-   - Destination: Tokyo
-   - Purpose: Research
-   - Dates: 2024-09-10 to 2024-09-20
-   - Budget Limit: $4500
-   - Approval Status: Approved
-
-4. **TR004**
-   - Employee: David Wong
-   - Destination: Toronto
-   - Purpose: Internal Audit
-   - Dates: 2024-10-05 to 2024-10-15
-   - Budget Limit: $3500
-   - Approval Status: Rejected
-
-5. **TR005**
-   - Employee: Eva Patel
-   - Destination: Dubai
-   - Purpose: Business Expo
-   - Dates: 2024-11-01 to 2024-11-10
-   - Budget Limit: $2000
-   - Approval Status: Approved
-
-**Organizational Rules:**
-
+Organizational Rules:
 1. Max budget per trip per employee: $3,000 (Region dependent)
 2. Business class flights only for Director level & above
 3. Approval from direct manager required for travel abroad
@@ -97,3 +58,44 @@
 6. Travel insurance mandatory for international trips
 7. Employees cannot book flights exceeding the budget limit
 8. Visa approval must be completed before flight booking
+
+Travel Requirements:
+1. Employee ID: 1001
+   - Destination: Berlin
+   - Purpose: Conference
+   - Start Date: 2024-07-15
+   - End Date: 2024-07-20
+   - Budget Limit: $2500
+   - Approval Status: Approved
+
+2. Employee ID: 1002
+   - Destination: London
+   - Purpose: Client Meeting
+   - Start Date: 2024-08-01
+   - End Date: 2024-08-05
+   - Budget Limit: $3000
+   - Approval Status: Pending
+
+3. Employee ID: 1003
+   - Destination: Tokyo
+   - Purpose: Research
+   - Start Date: 2024-09-10
+   - End Date: 2024-09-20
+   - Budget Limit: $4500
+   - Approval Status: Approved
+
+4. Employee ID: 1004
+   - Destination: Toronto
+   - Purpose: Internal Audit
+   - Start Date: 2024-10-05
+   - End Date: 2024-10-15
+   - Budget Limit: $3500
+   - Approval Status: Rejected
+
+5. Employee ID: 1005
+   - Destination: Dubai
+   - Purpose: Business Expo
+   - Start Date: 2024-11-01
+   - End Date: 2024-11-10
+   - Budget Limit: $2000
+   - Approval Status: Approved
