@@ -5,21 +5,38 @@ from datetime import datetime
 import time
 
 import openai
+from config import config
+
 
 from travel_assistant_api import TravelAssistantAPI
-
-
 class AITravelAssistant:
-    def _init_(self, config: Dict[str, Any]):
+     
+    #def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config):
+        print("Received Config:", config)  # Debugging Step
+
+        if 'api_keys' not in config:
+            raise ValueError("Config is missing 'api_keys' key!")
+
+        if 'booking_api_key' not in config['api_keys']:
+            raise ValueError("Config['api_keys'] is missing 'booking_api_key'!")
+
+        self.api_service = TravelAssistantAPI(config['api_keys'])  # Pass only the API keys
+
         """
         Initialize the AI Travel Assistant.
         
         Args:
             config: Dictionary containing API keys and configuration
         """
-        self.api_service = TravelAssistantAPI(config['api_keys'])
+        #self.api_service = TravelAssistantAPI(config['api_keys'])
+        
         openai.api_key = config['openai_api_key']
         self.user_context = {}  # Store user preferences and conversation context
+
+
+    from travel_assistant_api import TravelAssistantAPI
+
 
     async def process_user_query(self, user_id: str, query: str) -> str:
         """

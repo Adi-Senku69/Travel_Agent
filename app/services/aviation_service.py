@@ -5,7 +5,7 @@ from typing import Dict, Any, Optional
 
 class AviationService:
     def _init_(self, api_key: str):
-        self.api_key = api_key
+        self.api_key =api_key
         self.base_url = "http://api.aviationstack.com/v1"
 
     def get_flight_status(self, flight_number: str, date: Optional[str] = None) -> Dict[str, Any]:

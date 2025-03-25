@@ -1,27 +1,36 @@
 # travel_assistant_api.py
 from datetime import datetime
 from typing import Dict, Any, List, Optional
+from config import config
 
-from booking_service import BookingAPIService
-from weather_service import WeatherAPIService
-from mapbox_service import MapboxService
-from sherpa_service import SherpaService
-from aviation_service import AviationService
+
+from services.booking_service import BookingAPIService
+from services.weather_service import WeatherAPIService
+from services.mapbox_service import OpenRouteService
+from services.sherpa_service import SherpaService
+from services.aviation_service import AviationService
 
 
 class TravelAssistantAPI:
-    def _init_(self, config: Dict[str, str]):
+    def __init__(self, config: Dict[str, str]):
         """
         Initialize the Travel Assistant API with service API keys.
         
         Args:
             config: Dictionary containing API keys for all services
         """
-        self.booking_service = BookingAPIService(config['booking_api_key'])
-        self.weather_service = WeatherAPIService(config['weather_api_key'])
-        self.mapbox_service = MapboxService(config['mapbox_token'])
-        self.sherpa_service = SherpaService(config['sherpa_api_key'])
-        self.aviation_service = AviationService(config['aviation_api_key'])
+        #self.booking_service = BookingAPIService(config['booking_api_key'])
+        self.booking_service = BookingAPIService(config['api_keys']['booking_api_key'])  # ✅ Correct
+
+        # self.weather_service = WeatherAPIService(config['weather_api_key'])
+        # self.mapbox_service = OpenRouteService(config['mapbox_token'])
+        # self.sherpa_service = SherpaService(config['sherpa_api_key'])
+        # self.aviation_service = AviationService(config['aviation_api_key'])
+        self.weather_service = WeatherAPIService(config['api_keys']['weather_api_key'])
+        self.mapbox_service = OpenRouteService(config['api_keys']['mapbox_token'])
+        self.sherpa_service = SherpaService(config['api_keys']['sherpa_api_key'])
+        self.aviation_service = AviationService(config['api_keys']['aviation_api_key'])
+
 
     def plan_trip(self, trip_details: Dict[str, Any]) -> Dict[str, Any]:
         """
