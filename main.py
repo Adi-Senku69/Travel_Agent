@@ -1,8 +1,21 @@
 # main.py
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
+
+from app.travel_assistant_api import TravelAssistantAPI
+from app.ai_travel_assistant import AITravelAssistant
+
+
+
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from app.ai_travel_assistant import AITravelAssistant
-from config import config
+#from app.ai_travel_assistant import AITravelAssistant
+#from travel_assistant_api import AITravelAssistant
+
+from app.config import config
 
 app = FastAPI(title="AI Travel Assistant API")
 
@@ -38,6 +51,6 @@ async def register_trip(request: TripRegistrationRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to register trip: {str(e)}")
 
-if __name__== "_main_":
+if __name__== "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0",port=8080)
