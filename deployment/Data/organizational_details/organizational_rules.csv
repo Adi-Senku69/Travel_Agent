@@ -1,0 +1,9 @@
+Policy ID,Rule Description,Constraints
+ORG001,"Max budget per trip per employee: $3,000",Region dependent
+ORG002,Business class flights only for Director level & above,Yes
+ORG003,Approval from direct manager required for travel abroad,Yes
+ORG004,"Preferred airline partners: Lufthansa, Emirates, Delta",Yes
+ORG005,Hotels must be 4-star or higher for company bookings,Yes
+ORG006,Travel insurance mandatory for international trips,Yes
+ORG007,Employees cannot book flights exceeding the budget limit,Yes
+ORG008,Visa approval must be completed before flight booking,Yes

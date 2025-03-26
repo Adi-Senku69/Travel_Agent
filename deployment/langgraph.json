@@ -1,0 +1,10 @@
+{
+    "dockerfile_lines": ["WORKDIR /app ", "COPY Data /app/Data", "CMD ['ls','-R', '/app/Data']", "COPY summary /app/summary", "CMD ['ls','-R', '/app/summary']"],
+    "graphs": {
+      "chatbot": "./main.py:graph_chatbot"
+    },
+    "python_version": "3.12",
+    "dependencies": [
+      "."
+    ]
+  }
