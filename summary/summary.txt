@@ -60,7 +60,8 @@ Organizational Rules:
 8. Visa approval must be completed before flight booking
 
 Travel Requirements:
-1. Employee ID: 1001
+1. Request ID: TR001
+   - Employee ID: 1001
    - Destination: Berlin
    - Purpose: Conference
    - Start Date: 2025-07-15
@@ -68,7 +69,8 @@ Travel Requirements:
    - Budget Limit: $2500
    - Approval Status: Approved
 
-2. Employee ID: 1002
+2. Request ID: TR002
+   - Employee ID: 1002
    - Destination: London
    - Purpose: Client Meeting
    - Start Date: 2025-08-01
@@ -76,7 +78,8 @@ Travel Requirements:
    - Budget Limit: $3000
    - Approval Status: Pending
 
-3. Employee ID: 1003
+3. Request ID: TR003
+   - Employee ID: 1003
    - Destination: Tokyo
    - Purpose: Research
    - Start Date: 2025-09-10
@@ -84,7 +87,8 @@ Travel Requirements:
    - Budget Limit: $4500
    - Approval Status: Approved
 
-4. Employee ID: 1004
+4. Request ID: TR004
+   - Employee ID: 1004
    - Destination: Toronto
    - Purpose: Internal Audit
    - Start Date: 2025-10-05
@@ -92,7 +96,8 @@ Travel Requirements:
    - Budget Limit: $3500
    - Approval Status: Rejected
 
-5. Employee ID: 1005
+5. Request ID: TR005
+   - Employee ID: 1005
    - Destination: Dubai
    - Purpose: Business Expo
    - Start Date: 2025-11-01
