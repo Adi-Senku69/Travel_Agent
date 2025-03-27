@@ -1,2 +1,4 @@
 .env.secret
 .idea
+/deployment/.env
+travel-agent.tar
