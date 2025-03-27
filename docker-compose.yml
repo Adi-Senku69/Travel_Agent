@@ -41,4 +41,5 @@ services:
             OPENAI_API_KEY: "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"
             LANGSMITH_API_KEY: "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"
             WEATHERAPI_KEY: "3cf406570f684e5ca9f101822252603"
+            SERP_API_KEY: "b8d16efe71fa9b970357acf88710b1af80f9822c98d0351e1f79b5cf731f4ead"
             POSTGRES_URI: postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
