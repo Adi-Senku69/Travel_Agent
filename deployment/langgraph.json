@@ -1,7 +1,8 @@
 {
     "dockerfile_lines": [],
     "graphs": {
-      "chatbot": "./main.py:graph"
+      "chatbot": "./main.py:graph",
+      "alert_graph": "./main.py:graph_alert"
     },
     "python_version": "3.12",
     "dependencies": [

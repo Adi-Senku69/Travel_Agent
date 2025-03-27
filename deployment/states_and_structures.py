@@ -1,6 +1,18 @@
 from langgraph.graph import MessagesState
 from pydantic import BaseModel, Field
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, Annotated
+
+def merge_lists(left: list | None, right: list | None) -> list:
+    """Safely merge two lists, even if one is None."""
+    return (left or []) + (right or [])
+
+class TravelGraphState(TypedDict):
+    flight_status: Annotated[list[dict], merge_lists]
+    hotel_status: Annotated[list[dict], merge_lists]
+    booking_status: Annotated[list[dict], merge_lists]
+    weather_status: Annotated[list[dict], merge_lists]
+    memory: Annotated[list[str], merge_lists]
+
 
 class Profile(BaseModel):
     travel_history: str = Field(description="The travel history of the employee.")

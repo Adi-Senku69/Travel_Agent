@@ -9,7 +9,10 @@ from trustcall import create_extractor
 from langchain_core.runnables.config import RunnableConfig
 from langchain_core.messages import SystemMessage, AIMessage, RemoveMessage, ToolMessage
 from langgraph.store.base import BaseStore
+import requests
 import os
+
+env_values = {"WEATHERAPI_KEY": os.environ.get("WEATHERAPI_KEY")}
 
 def read_docs(state: SummaryGraphInput):
     PATH_TO_FILES = "./Data"
@@ -100,8 +103,6 @@ def route_ai(state: TravelAgent):
     else:
         return END
 
-TRUSTCALL_INSTRUCTION = """Create or update the memory (JSON doc) to incorporate information from the following conversation only if necessary. Do not change the organization rules. If no changes are necessary then return None"""
-
 def summarizer_and_updater(state: TravelAgent, config: RunnableConfig, store: BaseStore):
     messages = state['messages']
     summarization_prompt_inside = ChatPromptTemplate.from_messages([
@@ -129,42 +130,27 @@ def summarizer_and_updater(state: TravelAgent, config: RunnableConfig, store: Ba
     state['messages'] = deleted_messages
     return state
 
-chatbot_prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are a travel assistant. Help answer questions based on the profile. Analyze the profile and give relevant suggestions according to the profile.
-    The order of precedence for suggestions is likes, dislikes and then preferences. Adhere to the organizational rules for budget and other corporate matters.
-    The itinerary must be in a well structured format with the most likely to visit places first. Do not provide more than 5 suggestions. Take into account if there is any meetings when providing the time for leisure activities. You are essentially a travel concierge.
-    If there is some ambiguity in the question posed by the user, analyze the history to make some inferences, if that also does not work then ask a follow up question to rectify the ambiguity.
-    Behave like a concierge, providing follow up suggestions after providing the answer. Provide emoji's in the output.
 
-    Tool Call Instructions:
-    Analyze the travel requirements carefully.
-    To retrieve the flight data, use the flight_data tool call. The parameters of this tool, must first be generated from the prompt and then the travel requirements in the profile, and then if there is some ambiguity, clarify with the user. Use the current date and time to make real time booking suggestions. Make sure to adhere to all the organizational rules. When using departure token provide all the details including the departure token. If there are no flights, for the given query, then provide that as output and ask the user for clarification. For the return flight, unless the user specifies, use the date of departure as outbound date and keep the arrival date from 1-2 days from the outbound date.
+def chatbot(state: TravelAgent, store:BaseStore, config: RunnableConfig):
+    id = config['configurable']['user_id']
+    namespace = ("memory", id)
+    hotel_status, weather_status = None, None
 
-    To get hotel data, use the get_hotel_data tool, and all the parameters to this tool must be acquired from the prompt and the travel requirements and the user preferences and the organizational rules. Any ambiguity present, clarify with the user.
-
-    To get weather data, use the get_weather tool to get real time weather data. This tool can also forecast the weather for upto 3 days. Use this tool to account for the weather when generating itinerary, places to visit etc. if asked by the user. If the user asks to find the weather use this tool directly.
-
-    Action Instructions:
-    If for some reason a flight is canceled use the get_flight_data tool to get flight data, with the same arrival and departure id but new dates.
-    Do the same for hotel rebooking also by using get_hotel_data tool.
-
-
-    Answer questions only related to travelling.
-    Use the current date and time for real time suggestions. This is the current date and time: {date_time}
-    Summary of the conversation (can be empty also): {summary}
-    Reply from the tools for tool calls(can be empty also). If the reply from the tools is 'There are no such flights for the given criteria.' Then return do not perform any more tool calls: {reply}
-    If there is a reply from the tool calls, then provide the output based on the reply from the tool.
-    Profile: {profile}
-    Organization Rules: {organization}
-    Travel Requirements: {travel_requirements}
-    """),
-    ("placeholder", "{messages}"),
-    ("human", "{input}")
-
-])
-
-def chatbot(state: TravelAgent):
+    if store.get(namespace, "Hotel_Alert") is not None:
+        hotel_status = store.get(namespace, "Hotel_Alert").value
+    if store.get(namespace, "Weather_Alert") is not None:
+        weather_status = store.get(namespace, "Weather_Alert").value
     prompt = state['prompt']
+    hotel_data = state.get('hotel_data')
+
+    if hotel_status is not None and hotel_data:
+        prompt = "Give me some other suggestions as the hotels have been canceled"
+        store.put(namespace, "Hotel_Alert", {})
+
+    elif weather_status is not None:
+        prompt = "The weather is really bad, inform the user."
+        store.put(namespace, "Weather_Alert", {})
+
     summary = state.get('summary', "")
     profile = state['profile']
     messages = state['messages']
@@ -178,9 +164,7 @@ def chatbot(state: TravelAgent):
             if  "error" not in last_instance.content.lower():
                 reply = last_instance.content
                 if 'There are no such flights for the given criteria.' in reply:
-                    state['output'] = reply
-                    state['messages'] = [("ai", reply)]
-                    return state
+                        prompt = reply
                 state['flight_data'] = reply
         elif messages[-2].tool_calls[0]['name'] == "get_hotel_data":
             reply = last_instance.content
@@ -237,4 +221,78 @@ def update_profile(state: TravelAgent, store:BaseStore, config: RunnableConfig):
     updated_profile = result['responses'][0].model_dump()
     store.put(("memory", config['configurable']['user_id']), 'traveler', updated_profile)
     state['profile'] = updated_profile
+    return state
+
+def fetch_flight_status(state: TravelGraphState) -> TravelGraphState:
+    """Simulate fetching flight status."""
+    state["flight_status"] = [{"flight": "AI-202", "status": "Delayed"}]
+    return state
+
+def fetch_hotel_availability(state: TravelGraphState) -> TravelGraphState:
+    """Simulate fetching hotel availability."""
+    state["hotel_status"] = [{"hotel": "Hilton", "status": "Fully Booked"}]
+    return state
+
+def fetch_booking_status(state: TravelGraphState) -> TravelGraphState:
+    """Simulate fetching booking status."""
+    state["booking_status"] = [{"reference": "BKG-12345", "status": "Cancelled"}]
+    return state
+
+def fetch_weather_status(state: TravelGraphState) -> TravelGraphState:
+    """Fetch weather information using an API and update the state."""
+    city = state.get("city", "Bangalore")
+    API_KEY = env_values['WEATHERAPI_KEY']
+
+    if not API_KEY:
+        state["weather_status"] = [{"city": city, "condition": "Unknown", "temperature": "N/A"}]
+        return state
+
+    URL = f"http://api.weatherapi.com/v1/current.json?key={API_KEY}&q={city}&aqi=no"
+    response = requests.get(URL)
+
+    if response.status_code == 200:
+        data = response.json()
+        state["weather_status"] = [{
+            "city": city,
+            "condition": data["current"]["condition"]["text"],
+            "temperature": data["current"]["temp_c"],
+        }]
+    else:
+        state["weather_status"] = [{"city": city, "condition": "Unknown", "temperature": "N/A"}]
+
+    return state
+
+
+def store_memory(state: TravelGraphState, store: BaseStore, config: RunnableConfig) -> TravelGraphState:
+    user_id = config.get("configurable", {}).get("user_id", "default_user")
+    namespace = ("memory", user_id)
+
+    memory_updates = []
+
+    for flight in state.get("flight_status", []):
+        if flight.get("status") in ["Delayed", "Cancelled"]:
+            alert = f"{flight['status']} - {flight['flight']}"
+            store.put(namespace, "Flight_Alert", alert)
+            memory_updates.append(alert)
+
+    for booking in state.get("booking_status", []):
+        if booking.get("status") == "Cancelled":
+            alert = f"{booking['reference']} was cancelled!"
+            store.put(namespace, "Booking_Alert", alert)
+            memory_updates.append(alert)
+
+    for hotel in state.get("hotel_status", []):
+        if hotel.get("status") == "Fully Booked":
+            alert = f"{hotel['hotel']} has no available rooms!"
+            store.put(namespace, "Hotel_Alert", alert)
+            memory_updates.append(alert)
+
+    for weather in state.get("weather_status", []):
+        if weather.get("condition") in ["Thunderstorm", "Heavy Rain", "Extreme Heat"]:
+            alert = f"Severe weather in {weather['city']}: {weather['condition']}"
+            store.put(namespace, "Weather_Alert", alert)
+            memory_updates.append(alert)
+
+    state["memory"] = merge_lists(state.get("memory", []), memory_updates)
+    print("inside graph alert")
     return state

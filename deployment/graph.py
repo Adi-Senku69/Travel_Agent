@@ -44,3 +44,29 @@ graph_chatbot_builder.add_edge("update profile", END)
 memory = MemorySaver()
 store = InMemoryStore()
 graph_chatbot = graph_chatbot_builder.compile(checkpointer=memory, store=store, debug=False)
+
+builder = StateGraph(TravelGraphState)
+
+
+builder.add_node("start", lambda state: state)
+builder.add_node("fetch_flight_status", fetch_flight_status)
+builder.add_node("fetch_hotel_availability", fetch_hotel_availability)
+builder.add_node("fetch_booking_status", fetch_booking_status)
+builder.add_node("fetch_weather_status", fetch_weather_status)
+
+builder.add_node("memory_store", store_memory)
+
+builder.set_entry_point("start")
+
+builder.add_edge("start", "fetch_flight_status")
+builder.add_edge("start", "fetch_hotel_availability")
+builder.add_edge("start", "fetch_booking_status")
+builder.add_edge("start", "fetch_weather_status")
+
+builder.add_edge("fetch_flight_status", "memory_store")
+builder.add_edge("fetch_hotel_availability", "memory_store")
+builder.add_edge("fetch_booking_status", "memory_store")
+builder.add_edge("fetch_weather_status", "memory_store")
+builder.add_edge("memory_store", END)
+
+graph_alert = builder.compile(store=store)
